@@ -10,7 +10,7 @@ const HTML = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0a0a0f">
-<title>Sonora</title>
+<title>Espotifly</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:flex;flex-direction:column;height:100vh;height:100dvh}
@@ -233,7 +233,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🎵 Sonora corriendo en puerto ${PORT}`);
+  console.log(`🎵 Espotifly corriendo en puerto ${PORT}`);
   console.log(`📍 Abre: http://localhost:${PORT}`);
 });
 
