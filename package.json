@@ -1,7 +1,7 @@
 {
-  "name": "sonora-player",
+  "name": "espotifly-player",
   "version": "1.0.0",
-  "description": "Reproductor de música Sonora",
+  "description": "Reproductor de música Espotifly",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
