@@ -233,7 +233,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`🎵 Sonora corriendo en puerto ${PORT}`);
+  console.log(`🎵 Espotifly corriendo en puerto ${PORT}`);
   console.log(`📍 Abre: http://localhost:${PORT}`);
 });
 
