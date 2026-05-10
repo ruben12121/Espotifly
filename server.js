@@ -55,7 +55,7 @@ body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:f
 </head>
 <body>
 <div class="header">
-<div class="logo">♪ Sonora</div>
+<div class="logo">♪ Espotifly</div>
 <div class="search-box">
 <input type="search" id="search" placeholder="Buscar..." onkeydown="if(event.key==='Enter')search()" autocomplete="off">
 <button onclick="search()">Buscar</button>
