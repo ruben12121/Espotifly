@@ -14,10 +14,10 @@ const HTML = `<!DOCTYPE html>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:flex;flex-direction:column;height:100vh;height:100dvh}
-.header{display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;background:#13131a;border-bottom:1px solid rgba(255,255,255,.06)}
+.header{display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;background:#13131a;border-bottom:1px solid rgba(255,255,255,.06);flex-wrap:wrap}
 .logo{font-family:serif;font-size:1.3rem;color:#c9a96e}
-.search-box{display:flex;gap:6px;flex:1}
-.search-box input{flex:1;padding:.5rem .8rem;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:#1c1c27;color:#f0ece4;font-size:.85rem;outline:none}
+.search-box{display:flex;gap:6px;flex:1;min-width:200px}
+.search-box input{flex:1;padding:.5rem .8rem;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:#1c1c27;color:#f0ece4;font-size:.85rem;outline:none;min-width:0}
 .search-box input:focus{border-color:#c9a96e}
 .search-box button{background:#c9a96e;color:#0a0a0f;border:none;padding:.5rem 1rem;border-radius:20px;cursor:pointer;font-weight:700;font-size:.8rem;white-space:nowrap}
 .main{flex:1;padding:.8rem;overflow-y:auto}
@@ -25,39 +25,49 @@ body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:f
 .scroll-genres::-webkit-scrollbar{display:none}
 .genre{background:rgba(201,169,110,.1);color:#c9a96e;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:.72rem;border:1px solid rgba(201,169,110,.18);white-space:nowrap;flex-shrink:0}
 .genre:active{background:rgba(201,169,110,.3)}
-.tabs{display:flex;gap:.5rem;margin-bottom:1rem;border-bottom:2px solid rgba(255,255,255,.06);padding-bottom:.5rem}
-.tab{padding:.5rem 1rem;cursor:pointer;font-size:.8rem;color:#5a5750;border-radius:8px 8px 0 0;transition:all .2s}
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem;border-bottom:2px solid rgba(255,255,255,.06);padding-bottom:.5rem;flex-wrap:wrap}
+.tab{padding:.5rem 1rem;cursor:pointer;font-size:.8rem;color:#5a5750;border-radius:8px 8px 0 0;transition:all .2s;white-space:nowrap}
 .tab.active{color:#c9a96e;background:rgba(201,169,110,.1)}
 .tab:hover{color:#c9a96e}
-.playlist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem}
-.playlist-card{background:linear-gradient(135deg,#1c1c27,#13131a);border-radius:10px;padding:1rem;cursor:pointer;text-align:center;border:1px solid rgba(255,255,255,.04);transition:transform .2s}
+.playlist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.7rem}
+.playlist-card{background:linear-gradient(135deg,#1c1c27,#13131a);border-radius:12px;padding:1.2rem;cursor:pointer;text-align:center;border:1px solid rgba(255,255,255,.04);transition:transform .2s;position:relative}
 .playlist-card:active{transform:scale(.95)}
+.playlist-card-actions{display:flex;gap:.3rem;justify-content:center;margin-top:.8rem;opacity:0;transition:opacity .2s}
+.playlist-card:hover .playlist-card-actions{opacity:1}
+.action-btn{background:rgba(255,255,255,.1);border:none;color:#9e9a94;cursor:pointer;padding:.4rem .6rem;border-radius:6px;font-size:.7rem;transition:all .2s;display:flex;align-items:center;gap:.2rem}
+.action-btn:hover{background:rgba(255,255,255,.2);color:#f0ece4}
+.action-btn.delete:hover{background:rgba(229,12,32,.2);color:#e50c20}
+.action-btn.edit:hover{background:rgba(201,169,110,.2);color:#c9a96e}
 .playlist-icon{font-size:2.5rem;margin-bottom:.5rem}
-.playlist-name{font-size:.75rem;color:#f0ece4;margin-bottom:.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.playlist-count{font-size:.65rem;color:#5a5750}
-.create-playlist-btn{background:rgba(201,169,110,.1);color:#c9a96e;border:2px dashed rgba(201,169,110,.3);border-radius:10px;padding:1rem;cursor:pointer;text-align:center;font-size:.8rem;transition:all .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:120px}
-.create-playlist-btn:active{background:rgba(201,169,110,.2)}
-.create-playlist-btn .plus{font-size:2rem;margin-bottom:.3rem}
+.playlist-name{font-size:.8rem;color:#f0ece4;margin-bottom:.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.playlist-count{font-size:.7rem;color:#5a5750}
+.create-playlist-btn{background:rgba(201,169,110,.1);color:#c9a96e;border:2px dashed rgba(201,169,110,.3);border-radius:12px;padding:1.2rem;cursor:pointer;text-align:center;font-size:.8rem;transition:all .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px}
+.create-playlist-btn:hover{background:rgba(201,169,110,.2);transform:scale(1.02)}
+.create-playlist-btn .plus{font-size:2.5rem;margin-bottom:.3rem}
 .add-to-playlist-btn{position:absolute;top:5px;right:5px;background:rgba(0,0,0,.7);color:#c9a96e;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:1rem;display:none;align-items:center;justify-content:center;z-index:10}
 .card{position:relative}
 .card:hover .add-to-playlist-btn{display:flex}
 .card:active .add-to-playlist-btn{display:flex}
-.modal-playlist{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:10000;flex-direction:column;gap:.8rem}
-.modal-playlist.show{display:flex}
-.modal-playlist-content{background:#13131a;border-radius:12px;padding:1.5rem;max-width:350px;width:90%;border:1px solid rgba(255,255,255,.1)}
-.modal-playlist h3{color:#c9a96e;margin-bottom:1rem;font-size:1rem}
+/* Modal genérico */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:10000;backdrop-filter:blur(5px)}
+.modal-overlay.show{display:flex}
+.modal-content{background:#13131a;border-radius:16px;padding:1.5rem;max-width:400px;width:90%;border:1px solid rgba(255,255,255,.08);animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-content h3{color:#c9a96e;margin-bottom:1rem;font-size:1.1rem}
+.modal-input{width:100%;padding:.8rem 1rem;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:#1c1c27;color:#f0ece4;margin-bottom:1rem;font-size:.9rem;outline:none;transition:border-color .2s}
+.modal-input:focus{border-color:#c9a96e}
+.modal-buttons{display:flex;gap:.5rem}
+.modal-btn{padding:.8rem 1.2rem;border-radius:10px;border:none;cursor:pointer;font-weight:600;font-size:.85rem;flex:1;transition:transform .1s}
+.modal-btn:active{transform:scale(.97)}
+.modal-btn.primary{background:#c9a96e;color:#0a0a0f}
+.modal-btn.danger{background:rgba(229,12,32,.15);color:#e50c20;border:1px solid rgba(229,12,32,.3)}
+.modal-btn.secondary{background:rgba(255,255,255,.08);color:#f0ece4}
+/* Modal de añadir a playlist */
 .playlist-list{max-height:250px;overflow-y:auto;margin-bottom:1rem}
 .playlist-option{padding:.8rem;cursor:pointer;border-radius:8px;margin-bottom:.3rem;transition:background .2s;display:flex;justify-content:space-between;align-items:center}
 .playlist-option:hover{background:rgba(201,169,110,.1)}
 .playlist-option-name{font-size:.85rem;flex:1}
 .playlist-option-count{font-size:.7rem;color:#5a5750}
-.modal-input{width:100%;padding:.8rem;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:#1c1c27;color:#f0ece4;margin-bottom:.8rem;font-size:.85rem}
-.modal-input:focus{border-color:#c9a96e;outline:none}
-.modal-buttons{display:flex;gap:.5rem}
-.modal-btn{padding:.7rem 1.2rem;border-radius:20px;border:none;cursor:pointer;font-weight:700;font-size:.8rem;flex:1}
-.modal-btn.primary{background:#c9a96e;color:#0a0a0f}
-.modal-btn.secondary{background:rgba(255,255,255,.1);color:#f0ece4}
-.remove-btn{color:#e05c5c;background:none;border:none;cursor:pointer;font-size:1.1rem;padding:0 .3rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem}
 .card{background:#13131a;border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .2s;border:1px solid rgba(255,255,255,.04)}
 .card:active{transform:scale(.97)}
@@ -84,6 +94,11 @@ body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:f
 .loader span:nth-child(2){animation-delay:.2s}
 .loader span:nth-child(3){animation-delay:.4s}
 @keyframes bounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+/* Toast notification */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1c1c27;color:#f0ece4;padding:.8rem 1.5rem;border-radius:25px;font-size:.85rem;z-index:11000;animation:fadeInUp .3s ease;border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.toast.success{border-color:#1ed760;color:#1ed760}
+.toast.error{border-color:#e50c20;color:#e50c20}
+@keyframes fadeInUp{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 </style>
 </head>
 <body>
@@ -133,8 +148,10 @@ body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:f
 <iframe id="iframe" allow="autoplay" allowfullscreen></iframe>
 <button class="close-btn" onclick="closeModal()">Cerrar</button>
 </div>
-<div class="modal-playlist" id="addToPlaylistModal">
-<div class="modal-playlist-content">
+
+<!-- Modal para añadir a playlist -->
+<div class="modal-overlay" id="addToPlaylistModal">
+<div class="modal-content">
 <h3>Añadir a playlist</h3>
 <div class="playlist-list" id="playlistList"></div>
 <input type="text" class="modal-input" id="newPlaylistName" placeholder="Nombre de nueva playlist...">
@@ -144,14 +161,54 @@ body{background:#0a0a0f;color:#f0ece4;font-family:system-ui,sans-serif;display:f
 </div>
 </div>
 </div>
+
+<!-- Modal para editar playlist -->
+<div class="modal-overlay" id="editPlaylistModal">
+<div class="modal-content">
+<h3>✏️ Editar playlist</h3>
+<input type="text" class="modal-input" id="editPlaylistName" placeholder="Nuevo nombre...">
+<div class="modal-buttons">
+<button class="modal-btn primary" onclick="saveEditPlaylist()">Guardar</button>
+<button class="modal-btn secondary" onclick="closeEditPlaylistModal()">Cancelar</button>
+</div>
+</div>
+</div>
+
+<!-- Modal para confirmar eliminación -->
+<div class="modal-overlay" id="deletePlaylistModal">
+<div class="modal-content" style="text-align:center">
+<h3>🗑️ Eliminar playlist</h3>
+<p style="color:#5a5750;margin-bottom:1rem;font-size:.9rem" id="deletePlaylistMessage"></p>
+<div class="modal-buttons">
+<button class="modal-btn danger" onclick="confirmDeletePlaylist()">Eliminar</button>
+<button class="modal-btn secondary" onclick="closeDeletePlaylistModal()">Cancelar</button>
+</div>
+</div>
+</div>
+
+<!-- Toast notifications -->
+<div id="toast"></div>
+
 <script>
 let queue=[],idx=-1,playing=false;
 let playlists = JSON.parse(localStorage.getItem('espotifly_playlists') || '{}');
 let currentTab = 'search';
 let selectedSong = null;
+let playlistToEdit = null;
+let playlistToDelete = null;
 
 function savePlaylists() {
   localStorage.setItem('espotifly_playlists', JSON.stringify(playlists));
+}
+
+function showToast(message, type = '') {
+  const toast = document.getElementById('toast');
+  toast.className = 'toast ' + type;
+  toast.textContent = message;
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 2500);
 }
 
 function switchTab(tab) {
@@ -171,25 +228,35 @@ function switchTab(tab) {
 
 function renderPlaylists() {
   const container = document.getElementById('playlist-content');
-  const playlistNames = Object.keys(playlists);
+  const playlistNames = Object.keys(playlists).sort();
   
   if (playlistNames.length === 0) {
-    container.innerHTML = '<div class="msg"><div style="font-size:3rem">📝</div><p>No tienes playlists aún</p></div>';
+    container.innerHTML = '<div class="msg"><div style="font-size:3rem">📝</div><p>No tienes playlists aún</p><p style="font-size:.75rem">Crea una nueva playlist para empezar</p></div>';
   } else {
     let html = '<div class="playlist-grid">';
     playlistNames.forEach(name => {
       const count = playlists[name].length;
-      html += \`<div class="playlist-card" onclick="viewPlaylist('\${esc(name)}')">
-        <div class="playlist-icon">🎵</div>
-        <div class="playlist-name">\${esc(name)}</div>
-        <div class="playlist-count">\${count} canción\${count !== 1 ? 'es' : ''}</div>
+      html += \`<div class="playlist-card">
+        <div onclick="viewPlaylist('\${esc(name)}')">
+          <div class="playlist-icon">🎵</div>
+          <div class="playlist-name">\${esc(name)}</div>
+          <div class="playlist-count">\${count} canción\${count !== 1 ? 'es' : ''}</div>
+        </div>
+        <div class="playlist-card-actions">
+          <button class="action-btn edit" onclick="event.stopPropagation();openEditPlaylist('\${esc(name)}')" title="Editar nombre">
+            ✏️ Editar
+          </button>
+          <button class="action-btn delete" onclick="event.stopPropagation();openDeletePlaylist('\${esc(name)}')" title="Eliminar playlist">
+            🗑️ Borrar
+          </button>
+        </div>
       </div>\`;
     });
     html += '</div>';
     container.innerHTML = html;
   }
   
-  // Añadir botón de crear playlist
+  // Botón de crear nueva playlist
   container.innerHTML += \`<div style="margin-top:1rem">
     <div class="create-playlist-btn" onclick="createEmptyPlaylist()">
       <div class="plus">+</div>
@@ -199,16 +266,95 @@ function renderPlaylists() {
 }
 
 function createEmptyPlaylist() {
-  const name = prompt('Nombre de la nueva playlist:');
+  const name = prompt('🎵 Nombre de la nueva playlist:');
   if (name && name.trim()) {
     const trimmedName = name.trim();
     if (!playlists[trimmedName]) {
       playlists[trimmedName] = [];
       savePlaylists();
       renderPlaylists();
+      showToast(\`✅ Playlist "\${trimmedName}" creada\`, 'success');
     } else {
-      alert('Ya existe una playlist con ese nombre');
+      showToast('⚠️ Ya existe una playlist con ese nombre', 'error');
     }
+  }
+}
+
+// Funciones para editar playlist
+function openEditPlaylist(name) {
+  playlistToEdit = name;
+  document.getElementById('editPlaylistName').value = name;
+  document.getElementById('editPlaylistModal').classList.add('show');
+  document.getElementById('editPlaylistName').focus();
+}
+
+function closeEditPlaylistModal() {
+  document.getElementById('editPlaylistModal').classList.remove('show');
+  playlistToEdit = null;
+}
+
+function saveEditPlaylist() {
+  const newName = document.getElementById('editPlaylistName').value.trim();
+  
+  if (!newName) {
+    showToast('⚠️ El nombre no puede estar vacío', 'error');
+    return;
+  }
+  
+  if (newName === playlistToEdit) {
+    closeEditPlaylistModal();
+    return;
+  }
+  
+  if (playlists[newName]) {
+    showToast('⚠️ Ya existe una playlist con ese nombre', 'error');
+    return;
+  }
+  
+  // Renombrar la playlist
+  playlists[newName] = playlists[playlistToEdit];
+  delete playlists[playlistToEdit];
+  savePlaylists();
+  closeEditPlaylistModal();
+  renderPlaylists();
+  showToast(\`✅ Playlist renombrada a "\${newName}"\`, 'success');
+}
+
+// Cerrar modal de edición con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('editPlaylistModal').classList.contains('show')) {
+      closeEditPlaylistModal();
+    }
+  }
+});
+
+// Funciones para eliminar playlist
+function openDeletePlaylist(name) {
+  playlistToDelete = name;
+  const count = playlists[name].length;
+  document.getElementById('deletePlaylistMessage').textContent = 
+    \`¿Estás seguro de eliminar "\${name}"?\n\${count} canción\${count !== 1 ? 'es' : ''} se perderán.\`;
+  document.getElementById('deletePlaylistModal').classList.add('show');
+}
+
+function closeDeletePlaylistModal() {
+  document.getElementById('deletePlaylistModal').classList.remove('show');
+  playlistToDelete = null;
+}
+
+function confirmDeletePlaylist() {
+  if (playlistToDelete && playlists[playlistToDelete]) {
+    const name = playlistToDelete;
+    delete playlists[name];
+    savePlaylists();
+    closeDeletePlaylistModal();
+    
+    // Si estamos viendo una playlist específica, volver a la lista
+    if (currentTab === 'playlists') {
+      renderPlaylists();
+    }
+    showToast(\`🗑️ Playlist "\${name}" eliminada\`, 'success');
   }
 }
 
@@ -216,22 +362,27 @@ function viewPlaylist(name) {
   const songs = playlists[name] || [];
   const container = document.getElementById('playlist-content');
   
+  let html = \`<div style="margin-bottom:1rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+    <button class="ctrl-btn" onclick="switchTab('playlists');renderPlaylists()" style="font-size:1rem">← Volver</button>
+    <h3 style="font-size:.9rem;color:#c9a96e;flex:1;min-width:150px">\${esc(name)}</h3>
+    <button class="action-btn edit" onclick="openEditPlaylist('\${esc(name)}')">✏️ Editar</button>
+    <button class="action-btn delete" onclick="openDeletePlaylist('\${esc(name)}')">🗑️ Borrar</button>
+  </div>\`;
+  
   if (songs.length === 0) {
-    container.innerHTML = \`<div style="margin-bottom:1rem">
-      <button class="ctrl-btn" onclick="switchTab('playlists');renderPlaylists()" style="font-size:1rem">← Volver</button>
-    </div>
-    <div class="msg"><div style="font-size:3rem">🎵</div><p>Playlist vacía</p></div>\`;
+    html += '<div class="msg"><div style="font-size:3rem">🎵</div><p>Playlist vacía</p><p style="font-size:.75rem">Busca canciones y añádelas con el botón +</p></div>';
   } else {
-    let html = \`<div style="margin-bottom:1rem;display:flex;gap:.5rem;align-items:center">
-      <button class="ctrl-btn" onclick="switchTab('playlists');renderPlaylists()" style="font-size:1rem">← Volver</button>
-      <h3 style="font-size:.9rem;color:#c9a96e">\${esc(name)}</h3>
-      <button class="ctrl-btn" onclick="deletePlaylist('\${esc(name)}')" style="color:#e05c5c;font-size:.8rem;margin-left:auto">🗑️</button>
-    </div>
-    <div class="grid">\`;
+    html += \`<div style="margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:.75rem;color:#5a5750">\${songs.length} canción\${songs.length !== 1 ? 'es' : ''}</span>
+      <button class="action-btn edit" onclick="playAllSongs('\${esc(name)}')" style="font-size:.75rem">▶️ Reproducir todo</button>
+    </div>\`;
+    html += '<div class="grid">';
     
     songs.forEach((song, i) => {
       html += \`<div class="card" style="position:relative">
-        <button class="add-to-playlist-btn" style="display:flex" onclick="event.stopPropagation();removeFromPlaylist('\${esc(name)}', \${i})">✕</button>
+        <button class="add-to-playlist-btn" style="display:flex;background:rgba(229,12,32,.7);color:white" 
+                onclick="event.stopPropagation();removeFromPlaylist('\${esc(name)}', \${i})" 
+                title="Eliminar canción">✕</button>
         <div onclick="playPlaylistSong('\${esc(name)}', \${i})">
           <img src="\${song.thumb}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27320%27 height=%27180%27%3E%3Crect fill=%27%231c1c27%27 width=%27320%27 height=%27180%27/%3E%3C/svg%3E'">
           <div class="card-info">
@@ -243,23 +394,26 @@ function viewPlaylist(name) {
     });
     
     html += '</div>';
-    container.innerHTML = html;
   }
+  
+  container.innerHTML = html;
 }
 
-function deletePlaylist(name) {
-  if (confirm(\`¿Eliminar la playlist "\${name}"?\`)) {
-    delete playlists[name];
-    savePlaylists();
-    switchTab('playlists');
-    renderPlaylists();
+function playAllSongs(playlistName) {
+  const songs = playlists[playlistName];
+  if (songs.length > 0) {
+    queue = songs.map(s => ({...s}));
+    idx = 0;
+    playTrack();
   }
 }
 
 function removeFromPlaylist(playlistName, songIndex) {
+  const song = playlists[playlistName][songIndex];
   playlists[playlistName].splice(songIndex, 1);
   savePlaylists();
   viewPlaylist(playlistName);
+  showToast(\`🗑️ "\${song.title}" eliminada de la playlist\`, 'success');
 }
 
 function playPlaylistSong(playlistName, songIndex) {
@@ -274,14 +428,14 @@ function showAddToPlaylist(song) {
   const modal = document.getElementById('addToPlaylistModal');
   const list = document.getElementById('playlistList');
   
-  const playlistNames = Object.keys(playlists);
+  const playlistNames = Object.keys(playlists).sort();
   if (playlistNames.length === 0) {
-    list.innerHTML = '<p style="color:#5a5750;text-align:center;padding:1rem">No hay playlists. Crea una nueva abajo</p>';
+    list.innerHTML = '<p style="color:#5a5750;text-align:center;padding:1rem">No hay playlists. Crea una nueva abajo 👇</p>';
   } else {
     list.innerHTML = playlistNames.map(name => 
       \`<div class="playlist-option" onclick="addToExistingPlaylist('\${esc(name)}')">
         <span class="playlist-option-name">🎵 \${esc(name)}</span>
-        <span class="playlist-option-count">\${playlists[name].length}</span>
+        <span class="playlist-option-count">\${playlists[name].length} canciones</span>
       </div>\`
     ).join('');
   }
@@ -297,14 +451,13 @@ function closeAddToPlaylistModal() {
 
 function addToExistingPlaylist(playlistName) {
   if (selectedSong) {
-    // Verificar si la canción ya está en la playlist
     const exists = playlists[playlistName].some(s => s.id === selectedSong.id);
     if (exists) {
-      alert('Esta canción ya está en la playlist');
+      showToast('⚠️ Esta canción ya está en la playlist', 'error');
     } else {
       playlists[playlistName].push(selectedSong);
       savePlaylists();
-      alert(\`Añadido a "\${playlistName}"\`);
+      showToast(\`✅ Añadido a "\${playlistName}"\`, 'success');
     }
   }
   closeAddToPlaylistModal();
@@ -313,7 +466,7 @@ function addToExistingPlaylist(playlistName) {
 function addToNewPlaylist() {
   const name = document.getElementById('newPlaylistName').value.trim();
   if (!name) {
-    alert('Por favor, introduce un nombre');
+    showToast('⚠️ Introduce un nombre para la playlist', 'error');
     return;
   }
   
@@ -324,11 +477,11 @@ function addToNewPlaylist() {
   if (selectedSong) {
     const exists = playlists[name].some(s => s.id === selectedSong.id);
     if (exists) {
-      alert('Esta canción ya está en la playlist');
+      showToast('⚠️ Esta canción ya está en la playlist', 'error');
     } else {
       playlists[name].push(selectedSong);
       savePlaylists();
-      alert(\`Creada playlist "\${name}" y canción añadida\`);
+      showToast(\`✅ Creada "\${name}" con la canción\`, 'success');
     }
   }
   
@@ -396,7 +549,6 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 </html>`;
 
 const server = http.createServer((req, res) => {
-  // Log para debugging
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   
   try {
@@ -479,7 +631,6 @@ server.listen(PORT, () => {
   console.log(`📍 Abre: http://localhost:${PORT}`);
 });
 
-// Manejar errores no capturados
 process.on('uncaughtException', (err) => {
   console.error('Error no capturado:', err);
 });
